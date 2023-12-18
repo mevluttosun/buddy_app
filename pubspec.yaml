@@ -19,6 +19,7 @@ dependencies:
   cached_network_image: ^3.3.0
   get_it: ^7.6.4
   flutter_svg: ^2.0.9
+  modal_bottom_sheet: 3.0.0-pre
 
 dev_dependencies:
   flutter_test:
