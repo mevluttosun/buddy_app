@@ -1,4 +1,5 @@
 import 'package:buddy/config/routes/app_route.dart';
+import 'package:buddy/config/theme/app_theme.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_bloc.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_event.dart';
 import 'package:buddy/injection_container.dart';
@@ -19,9 +20,7 @@ class App extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<RemoteDogBloc>()..add(RemoteDogFetch()),
       child: MaterialApp.router(
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
+        theme: theme,
         routerConfig: sl<AppRouter>().config(),
       ),
     );
