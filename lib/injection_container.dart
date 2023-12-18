@@ -1,5 +1,6 @@
 import 'package:buddy/config/routes/app_route.dart';
 import 'package:buddy/core/app_dio.dart';
+import 'package:buddy/features/dog/data/data_sources/remote/dog_api_service_impl.dart';
 import 'package:buddy/features/dog/data/data_sources/remote/dog_api_service.dart';
 import 'package:buddy/features/dog/data/presentation/dog_repository_impl.dart';
 import 'package:buddy/features/dog/domain/repository/dog_repository.dart';
@@ -18,7 +19,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<Dio>(() => AppDio());
 
   // Dependencies
-  sl.registerLazySingleton<DogApiService>(() => DogApiService(dio: sl()));
+  sl.registerLazySingleton<DogApiService>(() => DogApiServiceImpl(dio: sl()));
 
   // Repositories
   sl.registerLazySingleton<DogRepository>(() => DogRepositoryImpl(

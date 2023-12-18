@@ -1,0 +1,78 @@
+```
+└── 📁lib
+    └── 📁common
+        └── 📁utils
+            └── string_utils.dart
+    └── 📁config
+        └── 📁theme
+            └── app_theme.dart
+    └── 📁core
+        └── app_dio.dart
+        └── 📁constants
+            └── constants.dart
+        └── 📁resources
+            └── data_state.dart
+        └── 📁usecases
+            └── usecase.dart
+    └── 📁features
+        └── 📁dog
+            └── 📁data
+                └── 📁data_sources
+                    └── 📁remote
+                        └── dog_api_service.dart
+                        └── dog_api_service_impl.dart
+                └── 📁models
+                    └── dog_breed_model.dart
+                └── 📁presentation
+                    └── dog_repository_impl.dart
+            └── 📁domain
+                └── 📁entities
+                    └── dog_breeds_entity.dart
+                └── 📁repository
+                    └── dog_repository.dart
+                └── 📁usecases
+                    └── get_breeds_usecase.dart
+            └── 📁presentation
+                └── 📁bloc
+                    └── 📁dog
+                        └── 📁remote
+                            └── remote_dog_bloc.dart
+                            └── remote_dog_event.dart
+                            └── remote_dog_state.dart
+                └── 📁pages
+                    └── 📁home
+                        └── dog_breeds_view.dart
+                └── 📁widgets
+                    └── search_widget.dart
+    └── injection_container.dart
+    └── main.dart
+```
+
+```
+└── 📁test
+    └── 📁features
+        └── 📁dog
+            └── 📁data
+                └── 📁data_sources
+                    └── 📁remote
+                        └── dog_api_service_test.dart
+                └── 📁models
+                    └── dog_breed_model_test.dart
+                └── 📁presentation
+                    └── dog_repository_impl_test.dart
+            └── 📁domain
+                └── 📁usecases
+                    └── get_breeds_usecase_test.dart
+            └── 📁presentation
+                └── 📁bloc
+                    └── 📁dog
+                        └── 📁remote
+                            └── remote_dog_bloc_test.dart
+    └── 📁helpers
+        └── 📁dummy_data
+            └── dog_breeds_list.dart
+            └── dummy_breeds_response.json
+        └── json_reader.dart
+        └── test_helper.dart
+        └── test_helper.mocks.dart
+```
