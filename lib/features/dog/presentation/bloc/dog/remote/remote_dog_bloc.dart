@@ -38,10 +38,7 @@ class RemoteDogBloc extends Bloc<RemoteDogEvent, RemoteDogState> {
       final datastate = DataSuccess(_breeds?.where((element) {
         return element.breedName!.toLowerCase().contains(event.query);
       }).toList());
-
-      if (datastate.data!.isNotEmpty) {
-        emit(RemoteDogLoaded(datastate.data!));
-      }
+      emit(RemoteDogLoaded(datastate.data!));
     }
   }
 

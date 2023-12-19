@@ -22,6 +22,7 @@ dependencies:
   modal_bottom_sheet: 3.0.0-pre
   basic_platform_service:
     path: local_packages/basic_platform_service
+  flutter_native_splash: ^2.3.8
 
 
 dev_dependencies:
@@ -35,6 +36,11 @@ dev_dependencies:
   bloc_test: ^9.1.5
   mocktail: ^1.0.2
 
+
+
+flutter_native_splash:
+  background_image: assets/splash_screen.png
+  image: assets/splash_screen.png
 flutter:
   uses-material-design: true
 
@@ -42,6 +48,8 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/fonts/
+    - assets/splash_screen.png
+
 
   fonts:
     - family: GalanoGrotesque
