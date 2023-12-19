@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:auto_route/annotations.dart';
+import 'package:basic_platform_service/basic_platform_service.dart';
 import 'package:buddy/common/utils/string_utils.dart';
 import 'package:buddy/core/constants/constants.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_bloc.dart';
@@ -19,7 +22,7 @@ class DogBreedView extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -84,7 +87,7 @@ class DogBreedView extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigationBar() {
+  Widget _buildBottomNavigationBar(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
@@ -105,31 +108,132 @@ class DogBreedView extends StatelessWidget {
                   SvgPicture.asset(
                     'assets/icons/home_icon.svg',
                   ),
-                  const Text('Home', style: TextStyle(color: Colors.blue)),
+                  const Text('Home',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                          color: Color(0xFF0055D3))),
                 ],
               ),
             ),
             const SizedBox(
               height: 24,
               child: VerticalDivider(
-                color: Colors.blue,
+                color: Color(0xFFD1D1D6),
                 thickness: 2,
                 width: 1,
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            const SettingsTileWidget(
+                              icon: Icons.info_outline,
+                              settingsTitle: 'About',
+                            ),
+                            const SettingsTileWidget(
+                              icon: Icons.star_border_outlined,
+                              settingsTitle: 'Rate Us',
+                            ),
+                            const SettingsTileWidget(
+                              icon: Icons.ios_share_outlined,
+                              settingsTitle: 'Share with Friends',
+                            ),
+                            const SettingsTileWidget(
+                              icon: Icons.sticky_note_2_outlined,
+                              settingsTitle: 'Terms of Use',
+                            ),
+                            const SettingsTileWidget(
+                              icon: Icons.privacy_tip_outlined,
+                              settingsTitle: 'Privacy Policy',
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.share),
+                              title: const Text('OS Version'),
+                              trailing: FutureBuilder(
+                                future: getOSVersion(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(snapshot.data ?? "");
+                                  } else {
+                                    return const CircularProgressIndicator();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ));
+              },
               icon: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SvgPicture.asset(
                     'assets/icons/settings_icon.svg',
                   ),
-                  const Text('Home', style: TextStyle(color: Colors.blue)),
+                  const Text('Settings',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black)),
                 ],
               ),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+Future<String> getOSVersion() async {
+  BasicPlatformService basicPlatformService = BasicPlatformService();
+  String? osVersion = await basicPlatformService.getPlatformVersion();
+
+  return osVersion ?? "";
+}
+
+class SettingsTileWidget extends StatelessWidget {
+  final IconData icon;
+  final String settingsTitle;
+  const SettingsTileWidget({
+    super.key,
+    required this.icon,
+    required this.settingsTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            icon,
+            size: 28,
+          ),
+          title: Text(settingsTitle),
+          onTap: () => Navigator.pop(context),
+          trailing: const Icon(
+            Icons.arrow_outward,
+            color: Color(0xFFC7C7CC),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          child: Divider(
+            color: Color(0xFFE5E5EA),
+            thickness: 2,
+            height: 1,
+          ),
         ),
       ],
     );

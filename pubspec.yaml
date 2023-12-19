@@ -20,6 +20,9 @@ dependencies:
   get_it: ^7.6.4
   flutter_svg: ^2.0.9
   modal_bottom_sheet: 3.0.0-pre
+  basic_platform_service:
+    path: local_packages/basic_platform_service
+
 
 dev_dependencies:
   flutter_test:
