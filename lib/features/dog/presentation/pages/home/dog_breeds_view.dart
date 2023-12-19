@@ -1,12 +1,12 @@
-import 'dart:io';
-
 import 'package:auto_route/annotations.dart';
 import 'package:basic_platform_service/basic_platform_service.dart';
 import 'package:buddy/common/utils/string_utils.dart';
 import 'package:buddy/core/constants/constants.dart';
+import 'package:buddy/features/dog/domain/entities/dog_breeds_entity.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_bloc.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_event.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_state.dart';
+import 'package:buddy/features/dog/presentation/widgets/animated_dialog.dart';
 import 'package:buddy/features/dog/presentation/widgets/search_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +53,13 @@ class DogBreedView extends StatelessWidget {
                     return BreedWidget(
                       breedName: state.data[index].breedName?.capitalize(),
                       imageUrl: state.data[index].breedImage,
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              BreedDetailWidget(breed: state.data[index]),
+                        );
+                      },
                     );
                   },
                 ),
@@ -195,6 +202,97 @@ class DogBreedView extends StatelessWidget {
   }
 }
 
+//TODO!!! Constants must be refactor by theme. Sorry If I don't have time to do it.
+class BreedDetailWidget extends StatelessWidget {
+  const BreedDetailWidget({
+    super.key,
+    required this.breed,
+  });
+  final DogBreedEntity breed;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    return AnimatedDialog(
+      animationType: DialogAnimationType.slide,
+      contentPadding: const EdgeInsets.all(0),
+      content: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: CachedBreedImageWidget(imageUrl: breed.breedImage)),
+              Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(
+                        Icons.cancel,
+                        size: 32,
+                        color: Colors.white,
+                      ))),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "Breed",
+            style:
+                theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+          ),
+          SizedBox(
+            width: size.width * 0.7,
+            child: Divider(
+              color: theme.disabledColor,
+              thickness: 2,
+              height: 32,
+            ),
+          ),
+          Text(breed.breedName?.capitalize() ?? "Unknown",
+              style: theme.textTheme.titleMedium!),
+          const SizedBox(height: 16),
+          Text(
+            "Sub Breed",
+            style:
+                theme.textTheme.titleLarge!.copyWith(color: theme.primaryColor),
+          ),
+          SizedBox(
+            width: size.width * 0.7,
+            child: Divider(
+              color: theme.disabledColor,
+              thickness: 2,
+              height: 32,
+            ),
+          ),
+          ...breed.subBreeds!
+              .map((e) => Text(e?.capitalize() ?? "Unknown"))
+              .toList(),
+          const SizedBox(height: 16),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              width: size.width * 0.7,
+              height: 56,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: theme.primaryColor,
+              ),
+              child: Text(
+                'Generate',
+                style:
+                    theme.textTheme.titleLarge!.copyWith(color: Colors.white),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+}
+
 Future<String> getOSVersion() async {
   BasicPlatformService basicPlatformService = BasicPlatformService();
   String? osVersion = await basicPlatformService.getPlatformVersion();
@@ -274,37 +372,7 @@ class BreedWidget extends StatelessWidget {
                 ),
               ),
             ),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl ?? kDefaultImage,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: theme.disabledColor,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                ),
-                width: size.width,
-                height: size.width,
-              ),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Container(
-                width: size.width,
-                height: size.width,
-                decoration: BoxDecoration(
-                  color: theme.disabledColor,
-                ),
-                child: const CircularProgressIndicator(),
-              ),
-              errorWidget: (context, url, error) => Container(
-                width: size.width,
-                height: size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: theme.disabledColor,
-                ),
-                child: const Icon(Icons.error),
-              ),
-            ))
+            child: CachedBreedImageWidget(imageUrl: imageUrl))
 
         // Stack(
         //   alignment: Alignment.center,
@@ -346,5 +414,49 @@ class BreedWidget extends StatelessWidget {
         //   ],
         // ),
         );
+  }
+}
+
+class CachedBreedImageWidget extends StatelessWidget {
+  const CachedBreedImageWidget({
+    super.key,
+    required this.imageUrl,
+  });
+
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Size size = MediaQuery.of(context).size;
+    return CachedNetworkImage(
+      imageUrl: imageUrl ?? kDefaultImage,
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: theme.disabledColor,
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+        width: size.width,
+        height: size.width,
+      ),
+      progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+        width: size.width,
+        height: size.width,
+        decoration: BoxDecoration(
+          color: theme.disabledColor,
+        ),
+        child: const CircularProgressIndicator(),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: size.width,
+        height: size.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: theme.disabledColor,
+        ),
+        child: const Icon(Icons.error),
+      ),
+    );
   }
 }
