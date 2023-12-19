@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:buddy/core/constants/constants.dart';
+import 'package:buddy/core/constants/asset_paths.dart';
 import 'package:buddy/core/resources/data_state.dart';
 import 'package:buddy/features/dog/domain/entities/dog_breeds_entity.dart';
 import 'package:buddy/features/dog/domain/usecases/get_breeds_usecase.dart';
@@ -47,7 +47,7 @@ class RemoteDogBloc extends Bloc<RemoteDogEvent, RemoteDogState> {
     if (datastate is DataSuccess) {
       return datastate.data!;
     } else {
-      return kDefaultImage;
+      return kDefaultImageUrl;
     }
   }
 }

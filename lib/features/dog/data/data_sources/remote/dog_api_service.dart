@@ -1,5 +1,4 @@
 import 'package:buddy/features/dog/data/models/dog_breed_model.dart';
-import 'package:dio/dio.dart';
 
 abstract class DogApiService {
   DogApiService();

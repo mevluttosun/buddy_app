@@ -1,3 +1,4 @@
+import 'package:buddy/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -33,7 +34,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           return SingleChildScrollView(
             controller: scrollController,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(kDefaultPaddingValue),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -73,13 +74,14 @@ class _SearchWidgetState extends State<SearchWidget> {
     return GestureDetector(
       onTap: () => _showBottomSheet(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        margin: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultPaddingValue, vertical: kDefaultPaddingValue),
+        margin: const EdgeInsets.symmetric(vertical: kDefaultPaddingValue),
         width: size.width,
         height: 64,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(kDefaultBorderRadiusValue),
           color: theme.colorScheme.background,
         ),
         child: SingleChildScrollView(
@@ -108,12 +110,13 @@ class BottomSheetDashWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Container(
         width: 40,
         height: 6,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: theme.dividerColor,
           borderRadius: BorderRadius.circular(4),
         ),
       ),

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:buddy/core/resources/data_state.dart';
-import 'package:buddy/features/dog/data/data_sources/remote/dog_api_service_impl.dart';
 import 'package:buddy/features/dog/data/data_sources/remote/dog_api_service.dart';
 import 'package:buddy/features/dog/data/models/dog_breed_model.dart';
 import 'package:buddy/features/dog/domain/repository/dog_repository.dart';

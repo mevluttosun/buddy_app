@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:async';
+import 'package:buddy/common/widgets/animations/bounce_in_animation.dart';
+import 'package:buddy/common/widgets/animations/slide_in_animation.dart';
 import 'package:buddy/config/theme/app_theme.dart';
-import 'package:buddy/features/dog/presentation/widgets/animations/bounce_in_animation.dart';
-import 'package:buddy/features/dog/presentation/widgets/animations/slide_in_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
