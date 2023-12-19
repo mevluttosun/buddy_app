@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'package:buddy/core/constants/constants.dart';
 import 'package:buddy/core/resources/data_state.dart';
 import 'package:buddy/features/dog/domain/entities/dog_breeds_entity.dart';
 import 'package:buddy/features/dog/domain/usecases/get_breeds_usecase.dart';
+import 'package:buddy/features/dog/domain/usecases/get_random_image_by_breed_usecase.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_event.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RemoteDogBloc extends Bloc<RemoteDogEvent, RemoteDogState> {
   final GetBreedsUseCase _getBreedsUseCase;
+  final GetRandomImageByBreedsUseCase _getRandomImageByBreedsUseCase;
   List<DogBreedEntity>? _breeds;
-  RemoteDogBloc(this._getBreedsUseCase) : super(RemoteDogInitial()) {
+  RemoteDogBloc(this._getBreedsUseCase, this._getRandomImageByBreedsUseCase)
+      : super(RemoteDogInitial()) {
     on<RemoteDogFetch>(_getBreeds);
     on<RemoteDogSearch>(_searchBreeds);
   }
@@ -38,6 +42,15 @@ class RemoteDogBloc extends Bloc<RemoteDogEvent, RemoteDogState> {
       if (datastate.data!.isNotEmpty) {
         emit(RemoteDogLoaded(datastate.data!));
       }
+    }
+  }
+
+  Future<String> getDogImageUrlByBreeds(String breedName) async {
+    final datastate = await _getRandomImageByBreedsUseCase(params: breedName);
+    if (datastate is DataSuccess) {
+      return datastate.data!;
+    } else {
+      return kDefaultImage;
     }
   }
 }

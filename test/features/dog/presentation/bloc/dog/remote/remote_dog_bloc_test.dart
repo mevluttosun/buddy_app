@@ -12,10 +12,13 @@ import '../../../../../../helpers/test_helper.mocks.dart';
 
 void main() {
   late MockGetBreedsUseCase mockGetBreedsUseCase;
+  late MockGetRandomImageByBreedsUseCase mockGetRandomImageByBreedsUseCase;
   late RemoteDogBloc remoteDogBloc;
   setUp(() {
     mockGetBreedsUseCase = MockGetBreedsUseCase();
-    remoteDogBloc = RemoteDogBloc(mockGetBreedsUseCase);
+    mockGetRandomImageByBreedsUseCase = MockGetRandomImageByBreedsUseCase();
+    remoteDogBloc =
+        RemoteDogBloc(mockGetBreedsUseCase, mockGetRandomImageByBreedsUseCase);
   });
 
   group('RemoteDogBloc', () {

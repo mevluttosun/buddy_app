@@ -1,6 +1,6 @@
 import 'package:buddy/core/resources/data_state.dart';
 import 'package:buddy/features/dog/data/models/dog_breed_model.dart';
-import 'package:buddy/features/dog/data/presentation/dog_repository_impl.dart';
+import 'package:buddy/features/dog/data/repository/dog_repository_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';

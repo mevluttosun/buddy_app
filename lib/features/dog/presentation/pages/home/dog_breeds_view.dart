@@ -270,7 +270,54 @@ class BreedDetailWidget extends StatelessWidget {
               .toList(),
           const SizedBox(height: 16),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedDialog(
+                      animationType: DialogAnimationType.slide,
+                      contentPadding: const EdgeInsets.all(0),
+                      content: Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FutureBuilder(
+                              future: context
+                                  .read<RemoteDogBloc>()
+                                  .getDogImageUrlByBreeds(breed.breedName!),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.35,
+                                      child: CachedBreedImageWidget(
+                                          imageUrl: snapshot.data as String));
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.cancel,
+                          size: 32,
+                          color: Colors.white,
+                        )),
+                  ],
+                ),
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
               width: size.width * 0.7,

@@ -16,6 +16,8 @@ import 'package:buddy/features/dog/domain/repository/dog_repository.dart'
     as _i4;
 import 'package:buddy/features/dog/domain/usecases/get_breeds_usecase.dart'
     as _i11;
+import 'package:buddy/features/dog/domain/usecases/get_random_image_by_breed_usecase.dart'
+    as _i12;
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i9;
@@ -983,4 +985,42 @@ class MockGetBreedsUseCase extends _i1.Mock implements _i11.GetBreedsUseCase {
           ),
         )),
       ) as _i6.Future<_i3.DataState<List<_i7.DogBreedEntity>>>);
+}
+
+/// A class which mocks [GetRandomImageByBreedsUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetRandomImageByBreedsUseCase extends _i1.Mock
+    implements _i12.GetRandomImageByBreedsUseCase {
+  MockGetRandomImageByBreedsUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.DogRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeDogRepository_6(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.DogRepository);
+
+  @override
+  _i6.Future<_i3.DataState<String>> call({String? params}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [],
+          {#params: params},
+        ),
+        returnValue:
+            _i6.Future<_i3.DataState<String>>.value(_FakeDataState_5<String>(
+          this,
+          Invocation.method(
+            #call,
+            [],
+            {#params: params},
+          ),
+        )),
+      ) as _i6.Future<_i3.DataState<String>>);
 }
