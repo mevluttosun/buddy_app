@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buddy/config/routes/app_route.dart';
 import 'package:buddy/config/theme/app_theme.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize dependency injections
   initializeDependencies();
   runApp(const App());
 }
