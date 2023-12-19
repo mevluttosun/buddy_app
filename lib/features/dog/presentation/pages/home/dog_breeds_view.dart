@@ -2,7 +2,9 @@ import 'package:auto_route/annotations.dart';
 import 'package:buddy/common/utils/string_utils.dart';
 import 'package:buddy/core/constants/constants.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_bloc.dart';
+import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_event.dart';
 import 'package:buddy/features/dog/presentation/bloc/dog/remote/remote_dog_state.dart';
+import 'package:buddy/features/dog/presentation/widgets/search_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,19 +37,31 @@ class DogBreedView extends StatelessWidget {
         } else if (state is RemoteDogLoaded) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: state.data.length,
-              itemBuilder: (context, index) {
-                return BreedWidget(
-                  breedName: state.data[index].breedName?.capitalize(),
-                  imageUrl: state.data[index].breedImage,
-                );
-              },
+            child: Stack(
+              children: [
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: state.data.length,
+                  itemBuilder: (context, index) {
+                    return BreedWidget(
+                      breedName: state.data[index].breedName?.capitalize(),
+                      imageUrl: state.data[index].breedImage,
+                    );
+                  },
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SearchWidget(
+                    onSearch: (value) {
+                      context.read<RemoteDogBloc>().add(RemoteDogSearch(value));
+                    },
+                  ),
+                ),
+              ],
             ),
           );
         } else if (state is RemoteDogError) {

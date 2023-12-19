@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({super.key});
+  const SearchWidget({super.key, required this.onSearch});
 
+  final Function onSearch;
   @override
-  _SearchWidgetState createState() => _SearchWidgetState();
+  State<SearchWidget> createState() => _SearchWidgetState();
 }
 
+//TODO max lines bug when bottom sheet is full
 class _SearchWidgetState extends State<SearchWidget> {
   String _text = '';
 
   void _showBottomSheet(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     TextEditingController controller = TextEditingController();
     controller.text = _text;
 
@@ -22,9 +25,9 @@ class _SearchWidgetState extends State<SearchWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.5,
-        maxChildSize: 1.0,
-        minChildSize: 0.5,
+        initialChildSize: .55,
+        maxChildSize: .88,
+        minChildSize: .55,
         expand: false,
         builder: (BuildContext context, ScrollController scrollController) {
           return SingleChildScrollView(
@@ -34,26 +37,21 @@ class _SearchWidgetState extends State<SearchWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
+                  const BottomSheetDashWidget(),
                   TextField(
+                    autofocus: true,
                     controller: controller,
                     decoration: const InputDecoration(
-                      hintText: 'Enter text here',
+                      hintText: 'Search',
                       border: InputBorder.none,
                     ),
-                    maxLines: null,
+                    //max lines if child size 0.55 then 3 if 0.85 then 5
+
+                    maxLines: getMaxLines(scrollController, size.height),
                     keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       _text = value;
+                      widget.onSearch(value);
                     },
                   ),
                 ],
@@ -70,19 +68,53 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Text Field Bottom Sheet Demo')),
-      body: Center(
-        child: GestureDetector(
-          onTap: () => _showBottomSheet(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(_text.isEmpty ? 'Tap here to enter text' : _text),
-          ),
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => _showBottomSheet(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        margin: const EdgeInsets.symmetric(vertical: 16),
+        width: size.width,
+        height: 64,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+          color: theme.colorScheme.background,
+        ),
+        child: SingleChildScrollView(
+            child: Text(_text.isEmpty ? 'Search' : _text)),
+      ),
+    );
+  }
+
+  // max lines if child size 0.55 then 3 if 0.85 then infinity
+  int? getMaxLines(ScrollController scrollController, double height) {
+    if (scrollController.hasClients) {
+      if (scrollController.position.viewportDimension <= height * 0.55) {
+        return 3;
+      } else {
+        return null;
+      }
+    }
+    return 3;
+  }
+}
+
+class BottomSheetDashWidget extends StatelessWidget {
+  const BottomSheetDashWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 40,
+        height: 6,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(4),
         ),
       ),
     );

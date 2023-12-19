@@ -8,3 +8,12 @@ abstract class RemoteDogEvent extends Equatable {
 }
 
 class RemoteDogFetch extends RemoteDogEvent {}
+
+class RemoteDogSearch extends RemoteDogEvent {
+  final String query;
+
+  const RemoteDogSearch(this.query);
+
+  @override
+  List<Object> get props => [query];
+}

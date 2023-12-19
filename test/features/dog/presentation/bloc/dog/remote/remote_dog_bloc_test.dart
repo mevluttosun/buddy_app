@@ -61,5 +61,31 @@ void main() {
         act: (bloc) => bloc.add(RemoteDogFetch()),
         expect: () =>
             [RemoteDogLoading(), RemoteDogError(badResponseDioError)]);
+    blocTest('Empty Search Query event test', build: () {
+      when(mockGetBreedsUseCase())
+          .thenAnswer((_) async => DataSuccess(dogBreeds));
+      return remoteDogBloc;
+    }, act: (bloc) {
+      bloc.add(RemoteDogFetch());
+      bloc.add(const RemoteDogSearch(''));
+    }, expect: () {
+      return [RemoteDogLoading(), RemoteDogLoaded(dogBreeds)];
+    });
+
+    blocTest('Search Query event test', build: () {
+      when(mockGetBreedsUseCase())
+          .thenAnswer((_) async => DataSuccess(dogBreeds));
+      return remoteDogBloc;
+    }, act: (bloc) {
+      bloc.add(RemoteDogFetch());
+      bloc.add(const RemoteDogSearch('a'));
+    }, expect: () {
+      return [
+        RemoteDogLoading(),
+        RemoteDogLoaded(dogBreeds.where((element) {
+          return element.breedName!.toLowerCase().contains('a');
+        }).toList())
+      ];
+    });
   });
 }
